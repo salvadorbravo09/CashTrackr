@@ -2,6 +2,7 @@ import express from "express";
 import colors from "colors";
 import morgan from "morgan";
 import { database } from "./config/database";
+import budgetRouter from "./routes/budget.routes";
 
 async function connectDB() {
   try {
@@ -24,5 +25,7 @@ app.use(express.json());
 
 // Conectar a la base de datos
 connectDB();
+
+app.use("/api/v1/budgets", budgetRouter);
 
 export default app;
