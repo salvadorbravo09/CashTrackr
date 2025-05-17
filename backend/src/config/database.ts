@@ -4,11 +4,10 @@ import dotenv from "dotenv";
 dotenv.config();
 
 export const database = new Sequelize(process.env.DATABASE_URL, {
-  dialect: "postgres",
+  models: [__dirname + "/../models/**/*"],
   dialectOptions: {
     ssl: {
       require: false,
     },
   },
-  logging: console.log,
 });
