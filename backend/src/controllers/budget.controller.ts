@@ -16,6 +16,7 @@ export const createBudget = async (req: Request, res: Response) => {
     res.status(201).json({ message: "Presupuesto creado correctamente" });
   } catch (error) {
     res.status(500).json({ error: "Hubo un error" });
+    return;
   }
 };
 
