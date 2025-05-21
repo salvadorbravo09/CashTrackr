@@ -9,6 +9,7 @@ import {
 import {
   createBudgetValidation,
   getBudgetByIdValidation,
+  updateBudgetByIdValidation,
 } from "../validations/budget.validation";
 import { handleInputValidation } from "../middleware/validation";
 
@@ -23,7 +24,7 @@ router.get(
   getBudgetById
 );
 router.post("/", createBudgetValidation, handleInputValidation, createBudget);
-router.put("/:id", updateBudgetById);
+router.put("/:id", updateBudgetByIdValidation, handleInputValidation, updateBudgetById);
 router.delete("/:id", deleteBudgetById);
 
 export default router;
