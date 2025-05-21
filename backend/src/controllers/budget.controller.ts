@@ -54,6 +54,17 @@ export const updateBudgetById = async (req: Request, res: Response) => {
   }
 };
 
-export const deleteBudgetById = (req: Request, res: Response) => {
-  console.log("desde DELETE /api/v1/budgets/:id");
+export const deleteBudgetById = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const budget = await Budget.findByPk(id);
+    if (!budget) {
+      res.status(404).json({ error: "Presupuesto no encontrado" });
+      return;
+    }
+    await budget.destroy();
+    res.status(200).json({ message: "Presupuesto eliminado correctamente" });
+  } catch (error) {
+    res.status(500).json({ error: "Hubo un error" });
+  }
 };

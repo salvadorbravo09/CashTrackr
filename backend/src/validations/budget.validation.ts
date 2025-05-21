@@ -38,3 +38,11 @@ export const updateBudgetByIdValidation = [
     .custom((value) => value > 0)
     .withMessage("La cantidad debe ser mayor a 0"),
 ];
+
+export const deleteBudgetByIdValidation = [
+  param("id")
+    .isInt()
+    .withMessage("El ID no es valido")
+    .custom((value) => value > 0)
+    .withMessage("El ID no es valido"),
+];
