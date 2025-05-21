@@ -41,6 +41,7 @@ router.put(
 router.delete(
   "/:id",
   deleteBudgetByIdValidation,
+  checkBudgetExists,
   handleInputValidation,
   deleteBudgetById
 );
