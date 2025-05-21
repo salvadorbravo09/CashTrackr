@@ -1,8 +1,16 @@
 import { Request, Response } from "express";
 import Budget from "../models/Budget";
 
-export const getAllBudgets = (req: Request, res: Response) => {
-  console.log("desde GET /api/v1/budgets");
+export const getAllBudgets = async (req: Request, res: Response) => {
+  try {
+    const budgets = await Budget.findAll({
+      order: [["createdAt", "DESC"]],
+      // TODO: Filtrar por el usuario autenticado
+    });
+    res.status(200).json(budgets);
+  } catch (error) {
+    res.status(500).json({ error: "Hubo un error" });
+  }
 };
 
 export const getBudgetById = (req: Request, res: Response) => {
