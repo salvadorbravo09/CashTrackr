@@ -1,4 +1,4 @@
-import { body } from "express-validator";
+import { body, param } from "express-validator";
 
 export const createBudgetValidation = [
   body("name")
@@ -11,4 +11,12 @@ export const createBudgetValidation = [
     .withMessage("La cantidad debe ser un numero")
     .custom((value) => value > 0)
     .withMessage("La cantidad debe ser mayor a 0"),
+];
+
+export const getBudgetByIdValidation = [
+  param("id")
+    .isInt()
+    .withMessage("El ID no es valido")
+    .custom((value) => value > 0)
+    .withMessage("El ID no es valido"),
 ];
