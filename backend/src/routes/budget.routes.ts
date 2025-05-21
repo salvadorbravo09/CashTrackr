@@ -33,6 +33,7 @@ router.post("/", createBudgetValidation, handleInputValidation, createBudget);
 router.put(
   "/:id",
   updateBudgetByIdValidation,
+  checkBudgetExists,
   handleInputValidation,
   updateBudgetById
 );
