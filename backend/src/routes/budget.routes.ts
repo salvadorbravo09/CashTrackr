@@ -13,6 +13,7 @@ import {
   updateBudgetByIdValidation,
 } from "../validations/budget.validation";
 import { handleInputValidation } from "../middleware/validation";
+import { checkBudgetExists } from "../middleware/checkBudgetExists.middleware";
 
 const router = Router();
 
@@ -22,6 +23,7 @@ router.get("/", getAllBudgets);
 router.get(
   "/:id",
   getBudgetByIdValidation,
+  checkBudgetExists,
   handleInputValidation,
   getBudgetById
 );

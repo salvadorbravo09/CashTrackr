@@ -14,17 +14,7 @@ export const getAllBudgets = async (req: Request, res: Response) => {
 };
 
 export const getBudgetById = async (req: Request, res: Response) => {
-  try {
-    const { id } = req.params;
-    const budget = await Budget.findByPk(id);
-    if (!budget) {
-      res.status(404).json({ error: "Presupuesto no encontrado" });
-      return;
-    }
-    res.status(200).json(budget);
-  } catch (error) {
-    res.status(500).json({ error: "Hubo un error" });
-  }
+  res.status(200).json(req.budget);
 };
 
 export const createBudget = async (req: Request, res: Response) => {
