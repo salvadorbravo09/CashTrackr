@@ -16,10 +16,16 @@ import {
 import { handleInputValidation } from "../middleware/validation";
 import {
   createExpense,
-  deleteExpenseById, getExpenseById,
-  updateExpenseById
+  deleteExpenseById,
+  getExpenseById,
+  updateExpenseById,
 } from "../controllers/expense.controller";
-import { createExpenseValidation } from "../validations/expense.validation";
+import {
+  createExpenseValidation,
+  validateExpenseId,
+  updateExpenseValidation,
+  deleteExpenseValidation,
+} from "../validations/expense.validation";
 
 const router = Router();
 
@@ -53,8 +59,6 @@ router.delete(
 );
 
 // Routes for expenses
-router.get("/:budgetId/expenses/:expenseId", checkBudgetExists, getExpenseById);
-
 router.post(
   "/:budgetId/expenses",
   checkBudgetExists,
@@ -63,10 +67,18 @@ router.post(
   createExpense
 );
 
+router.get(
+  "/:budgetId/expenses/:expenseId",
+  checkBudgetExists,
+  validateExpenseId,
+  handleInputValidation,
+  getExpenseById
+);
+
 router.put(
   "/:budgetId/expenses/:expenseId",
   checkBudgetExists,
-  createExpenseValidation,
+  updateExpenseValidation,
   handleInputValidation,
   updateExpenseById
 );
@@ -74,6 +86,8 @@ router.put(
 router.delete(
   "/:budgetId/expenses/:expenseId",
   checkBudgetExists,
+  deleteExpenseValidation,
+  handleInputValidation,
   deleteExpenseById
 );
 
