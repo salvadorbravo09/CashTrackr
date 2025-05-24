@@ -1,7 +1,9 @@
 import { Request, Response } from "express";
 import Expense from "../models/Expense";
 
-export const getExpenseById = async (req: Request, res: Response) => {};
+export const getExpenseById = async (req: Request, res: Response) => {
+  
+};
 
 export const createExpense = async (req: Request, res: Response) => {
   try {

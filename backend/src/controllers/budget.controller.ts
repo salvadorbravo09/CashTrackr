@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import Budget from "../models/Budget";
+import Expense from "../models/Expense";
 
 export const getAllBudgets = async (req: Request, res: Response) => {
   try {
@@ -14,7 +15,11 @@ export const getAllBudgets = async (req: Request, res: Response) => {
 };
 
 export const getBudgetById = async (req: Request, res: Response) => {
-  res.status(200).json(req.budget);
+  const budget = await Budget.findByPk(req.budget.id, {
+    include: [Expense]
+  });
+
+  res.status(200).json(budget);
 };
 
 export const createBudget = async (req: Request, res: Response) => {
