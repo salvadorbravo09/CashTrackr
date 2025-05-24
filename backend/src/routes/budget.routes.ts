@@ -1,3 +1,4 @@
+import { checkBudgetExists } from "./../middleware/checkBudgetExists.middleware";
 import { Router } from "express";
 import {
   createBudget,
@@ -13,8 +14,12 @@ import {
   updateBudgetByIdValidation,
 } from "../validations/budget.validation";
 import { handleInputValidation } from "../middleware/validation";
-import { checkBudgetExists } from "../middleware/checkBudgetExists.middleware";
-import { createExpense, deleteExpenseById, getAllExpenses, getExpenseById, updateExpenseById } from "../controllers/expense.controller";
+import {
+  createExpense,
+  deleteExpenseById, getExpenseById,
+  updateExpenseById
+} from "../controllers/expense.controller";
+import { createExpenseValidation } from "../validations/expense.validation";
 
 const router = Router();
 
@@ -22,7 +27,7 @@ const router = Router();
 router.get("/", getAllBudgets);
 
 router.get(
-  "/:id",
+  "/:budgetId",
   getBudgetByIdValidation,
   checkBudgetExists,
   handleInputValidation,
@@ -32,7 +37,7 @@ router.get(
 router.post("/", createBudgetValidation, handleInputValidation, createBudget);
 
 router.put(
-  "/:id",
+  "/:budgetId",
   updateBudgetByIdValidation,
   checkBudgetExists,
   handleInputValidation,
@@ -40,7 +45,7 @@ router.put(
 );
 
 router.delete(
-  "/:id",
+  "/:budgetId",
   deleteBudgetByIdValidation,
   checkBudgetExists,
   handleInputValidation,
@@ -48,11 +53,28 @@ router.delete(
 );
 
 // Routes for expenses
-router.get("/:id/expenses", getAllExpenses);
-router.get("/:id/expenses/:expenseId", getExpenseById);
-router.post("/:id/expenses", createExpense);
-router.put("/:id/expenses/:expenseId", updateExpenseById);
-router.delete("/:id/expenses/:expenseId", deleteExpenseById);
+router.get("/:budgetId/expenses/:expenseId", checkBudgetExists, getExpenseById);
 
+router.post(
+  "/:budgetId/expenses",
+  checkBudgetExists,
+  createExpenseValidation,
+  handleInputValidation,
+  createExpense
+);
+
+router.put(
+  "/:budgetId/expenses/:expenseId",
+  checkBudgetExists,
+  createExpenseValidation,
+  handleInputValidation,
+  updateExpenseById
+);
+
+router.delete(
+  "/:budgetId/expenses/:expenseId",
+  checkBudgetExists,
+  deleteExpenseById
+);
 
 export default router;

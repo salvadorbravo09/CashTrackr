@@ -14,7 +14,7 @@ export const createBudgetValidation = [
 ];
 
 export const getBudgetByIdValidation = [
-  param("id")
+  param("budgetId")
     .isInt()
     .withMessage("El ID no es valido")
     .custom((value) => value > 0)
@@ -22,7 +22,7 @@ export const getBudgetByIdValidation = [
 ];
 
 export const updateBudgetByIdValidation = [
-  param("id")
+  param("budgetId")
     .isInt()
     .withMessage("El ID no es valido")
     .custom((value) => value > 0)
@@ -40,7 +40,7 @@ export const updateBudgetByIdValidation = [
 ];
 
 export const deleteBudgetByIdValidation = [
-  param("id")
+  param("budgetId")
     .isInt()
     .withMessage("El ID no es valido")
     .custom((value) => value > 0)

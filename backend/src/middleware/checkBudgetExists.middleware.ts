@@ -15,8 +15,8 @@ export const checkBudgetExists = async (
   next: NextFunction
 ) => {
   try {
-    const { id } = req.params;
-    const budget = await Budget.findByPk(id);
+    const { budgetId } = req.params;
+    const budget = await Budget.findByPk(budgetId);
 
     if (!budget) {
       res.status(404).json({ error: "Presupuesto no encontrado" });
