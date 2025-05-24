@@ -26,6 +26,7 @@ import {
   updateExpenseValidation,
   deleteExpenseValidation,
 } from "../validations/expense.validation";
+import { checkExpenseExists } from "../middleware/checkExpenseExists.middleware";
 
 const router = Router();
 
@@ -70,6 +71,7 @@ router.post(
 router.get(
   "/:budgetId/expenses/:expenseId",
   checkBudgetExists,
+  checkExpenseExists,
   validateExpenseId,
   handleInputValidation,
   getExpenseById
@@ -78,6 +80,7 @@ router.get(
 router.put(
   "/:budgetId/expenses/:expenseId",
   checkBudgetExists,
+  checkExpenseExists,
   updateExpenseValidation,
   handleInputValidation,
   updateExpenseById
@@ -86,6 +89,7 @@ router.put(
 router.delete(
   "/:budgetId/expenses/:expenseId",
   checkBudgetExists,
+  checkExpenseExists,
   deleteExpenseValidation,
   handleInputValidation,
   deleteExpenseById
