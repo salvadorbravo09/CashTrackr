@@ -9,6 +9,7 @@ import {
   AllowNull,
 } from "sequelize-typescript";
 import Expense from "./Expense";
+import User from "./User";
 
 /**
  * Modelo que representa un presupuesto en el sistema.
@@ -49,6 +50,12 @@ class Budget extends Model {
     onDelete: "CASCADE",
   })
   declare expenses: Expense[];
+
+  @ForeignKey(() => User)
+  declare userId: number;
+
+  @BelongsTo(() => User)
+  declare user: User;
 }
 
 export default Budget;
