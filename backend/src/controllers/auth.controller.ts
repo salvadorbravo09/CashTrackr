@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import User from "../models/User";
 import { hashPassword } from "../utils/auth";
+import { generateToken } from "../utils/token";
 
 export const createAccount = async (req: Request, res: Response) => {
   try {
@@ -17,11 +18,15 @@ export const createAccount = async (req: Request, res: Response) => {
     // Encriptar la contraseña
     const hashedPassword = await hashPassword(password);
 
+    // Generar token
+    const token = generateToken();
+
     // Crear un nuevo usuario con los datos proporcionados
     const user = new User({
       name,
       email,
       password: hashedPassword,
+      token,
     });
 
     await user.save(); // Guardar el usuario en la base de datos
