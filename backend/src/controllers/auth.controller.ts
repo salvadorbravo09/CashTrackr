@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import User from "../models/User";
 import { hashPassword } from "../utils/auth";
 import { generateToken } from "../utils/token";
+import { sendConfirmationEmail } from "../emails/authEmail";
 
 export const createAccount = async (req: Request, res: Response) => {
   try {
@@ -30,6 +31,13 @@ export const createAccount = async (req: Request, res: Response) => {
     });
 
     await user.save(); // Guardar el usuario en la base de datos
+
+    // Enviar email de confirmacion
+    await sendConfirmationEmail({
+      name: user.name,
+      email: user.email,
+      token: user.token,
+    });
     res.status(201).json({ message: "Usuario creado correctamente" });
   } catch (error) {
     console.log(error);
