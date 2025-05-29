@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { body } from "express-validator";
-import { createAccount } from "../controllers/auth.controller";
+import { confirmAccount, createAccount } from "../controllers/auth.controller";
 import { handleInputValidation } from "../middleware/validation";
 
 const router = Router();
@@ -14,6 +14,16 @@ router.post(
   body("email").isEmail().withMessage("El email debe ser un email valido"),
   handleInputValidation, // Si hay errores de validacion, se llama a este middleware
   createAccount
+);
+
+router.post(
+  "/confirm-account",
+  body("token")
+    .notEmpty()
+    .isLength({ min: 6, max: 6 })
+    .withMessage("Token no valido"),
+  handleInputValidation,
+  confirmAccount
 );
 
 export default router;

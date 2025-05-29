@@ -44,3 +44,24 @@ export const createAccount = async (req: Request, res: Response) => {
     res.status(500).json({ error: "Hubo un error" });
   }
 };
+
+export const confirmAccount = async (req: Request, res: Response) => {
+  try {
+    const { token } = req.body;
+
+    const user = await User.findOne({ where: { token: token } });
+    if (!user) {
+      res.status(404).json({ error: "Token no valido" });
+      return;
+    }
+
+    // Marcar el usuario como confirmado
+    user.confirmed = true;
+    user.token = ""; // Limpiar el token ya utilizado
+    await user.save();
+    res.status(200).json({ message: "Cuenta confirmada correctamente" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Hubo un error al confirmar la cuenta" });
+  }
+};
