@@ -3,7 +3,7 @@ import colors from "colors";
 import morgan from "morgan";
 import { database } from "./config/database";
 import budgetRouter from "./routes/budget.routes";
-import authRouter from "./routes/auth.router";
+import authRouter from "./routes/auth.routes";
 
 async function connectDB() {
   try {
