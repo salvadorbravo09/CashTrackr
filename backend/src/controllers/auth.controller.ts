@@ -2,7 +2,10 @@ import { Request, Response } from "express";
 import User from "../models/User";
 import { comparePassword, hashPassword } from "../utils/auth";
 import { generateToken } from "../utils/token";
-import { sendConfirmationEmail } from "../emails/authEmail";
+import {
+  sendConfirmationEmail,
+  sendPasswordResetToken,
+} from "../emails/authEmail";
 import { generateJWT } from "../utils/jwt";
 
 export const createAccount = async (req: Request, res: Response) => {
@@ -90,8 +93,29 @@ export const login = async (req: Request, res: Response) => {
 
     // Generar un token JWT
     const token = generateJWT(user.id);
-    res.json(token);
+    res.status(200).json(token);
   } catch (error) {
     res.status(500).json({ error: "Hubo un error al iniciar sesión" });
   }
+};
+
+export const forgotPassword = async (req: Request, res: Response) => {
+  const { email } = req.body;
+
+  const user = await User.findOne({ where: { email } });
+  if (!user) {
+    res.status(404).json({ error: "Usuario no encontrado" });
+    return;
+  }
+
+  user.token = generateToken(); // Generar un nuevo token
+  await user.save();
+
+  await sendPasswordResetToken({
+    name: user.name,
+    email: user.email,
+    token: user.token,
+  });
+
+  res.json("Revisa tu email para instrucciones");
 };

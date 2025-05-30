@@ -3,12 +3,15 @@ import { body } from "express-validator";
 import {
   confirmAccount,
   createAccount,
+  forgotPassword,
   login,
 } from "../controllers/auth.controller";
 import { handleInputValidation } from "../middleware/validation";
 import { limiter } from "../config/limiter";
 
 const router = Router();
+
+router.use(limiter); // Aplicar el limitador a todas las rutas de este router
 
 router.post(
   "/create-account",
@@ -23,7 +26,6 @@ router.post(
 
 router.post(
   "/confirm-account",
-  limiter,
   body("token")
     .notEmpty()
     .isLength({ min: 6, max: 6 })
@@ -38,6 +40,13 @@ router.post(
   body("password").notEmpty().withMessage("El password no puede ir vacio"),
   handleInputValidation,
   login
+);
+
+router.post(
+  "/forgot-password",
+  body("email").isEmail().withMessage("Email no valido"),
+  handleInputValidation,
+  forgotPassword
 );
 
 export default router;
