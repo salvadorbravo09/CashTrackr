@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import User from "../models/User";
-import { hashPassword } from "../utils/auth";
+import { comparePassword, hashPassword } from "../utils/auth";
 import { generateToken } from "../utils/token";
 import { sendConfirmationEmail } from "../emails/authEmail";
 
@@ -68,7 +68,7 @@ export const confirmAccount = async (req: Request, res: Response) => {
 
 export const login = async (req: Request, res: Response) => {
   try {
-    const { email } = req.body;
+    const { email, password } = req.body;
 
     const user = await User.findOne({ where: { email } });
     if (!user) {
@@ -76,8 +76,16 @@ export const login = async (req: Request, res: Response) => {
       return;
     }
 
-    
+    if (!user.confirmed) {
+      res.status(403).json({ error: "Cuenta no confirmada" });
+      return;
+    }
 
+    const isPasswordCorrect = await comparePassword(password, user.password);
+    if (!isPasswordCorrect) {
+      res.status(401).json({ error: "Contraseña incorrecta" });
+      return;
+    }
   } catch (error) {
     res.status(500).json({ error: "Hubo un error al iniciar sesión" });
   }
