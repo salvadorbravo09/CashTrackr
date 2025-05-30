@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import jwt from "jsonwebtoken";
 import User from "../models/User";
 import { comparePassword, hashPassword } from "../utils/auth";
 import { generateToken } from "../utils/token";
@@ -152,27 +151,5 @@ export const resetPasswordWithToken = async (req: Request, res: Response) => {
 };
 
 export const getUser = async (req: Request, res: Response) => {
-  const bearer = req.headers.authorization;
-  if (!bearer) {
-    res.status(401).json({ error: "No autorizado" });
-    return;
-  }
-
-  const [, token] = bearer.split(" ");
-  if (!token) {
-    res.status(401).json({ error: "Token no valido" });
-    return;
-  }
-
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
-    if (typeof decoded === "object" && decoded.id) {
-      const user = await User.findByPk(decoded.id, {
-        attributes: ["id", "name", "email"],
-      });
-      res.json(user)
-    }
-  } catch (error) {
-    res.status(500).json({ error: "Token no valido" });
-  }
+  res.json(req.user);
 };

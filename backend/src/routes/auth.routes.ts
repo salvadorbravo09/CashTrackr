@@ -11,6 +11,7 @@ import {
 } from "../controllers/auth.controller";
 import { handleInputValidation } from "../middleware/validation";
 import { limiter } from "../config/limiter";
+import { authenticate } from "../middleware/auth";
 
 const router = Router();
 
@@ -75,6 +76,6 @@ router.post(
   resetPasswordWithToken
 );
 
-router.get("/user", getUser);
+router.get("/user", authenticate, getUser);
 
 export default router;
