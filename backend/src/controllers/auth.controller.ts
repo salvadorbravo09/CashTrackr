@@ -131,3 +131,21 @@ export const validateToken = async (req: Request, res: Response) => {
 
   res.status(200).json({ message: "Token valido" });
 };
+
+export const resetPasswordWithToken = async (req: Request, res: Response) => {
+  const { token } = req.params;
+  const { password } = req.body;
+
+  const user = await User.findOne({ where: { token } });
+  if (!user) {
+    res.status(404).json({ error: "Token no valido" });
+    return;
+  }
+
+  // Asignar el nuevo password
+  user.password = await hashPassword(password);
+  user.token = "";
+  await user.save();
+
+  res.status(200).json({ message: "Contraseña reestablecida correctamente" });
+};

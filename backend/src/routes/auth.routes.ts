@@ -1,10 +1,11 @@
 import { Router } from "express";
-import { body } from "express-validator";
+import { body, param } from "express-validator";
 import {
   confirmAccount,
   createAccount,
   forgotPassword,
   login,
+  resetPasswordWithToken,
   validateToken,
 } from "../controllers/auth.controller";
 import { handleInputValidation } from "../middleware/validation";
@@ -58,6 +59,19 @@ router.post(
     .withMessage("Token no valido"),
   handleInputValidation,
   validateToken
+);
+
+router.post(
+  "/reset-password/:token",
+  param("token")
+    .notEmpty()
+    .isLength({ min: 6, max: 6 })
+    .withMessage("Token no valido"),
+  body("password")
+    .isLength({ min: 8 })
+    .withMessage("El password debe tener al menos 8 caracteres"),
+  handleInputValidation,
+  resetPasswordWithToken
 );
 
 export default router;
