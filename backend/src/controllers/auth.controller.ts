@@ -167,9 +167,14 @@ export const updateCurrentUserPassword = async (
     current_password,
     user.password
   );
+
   if (!isPasswordCorrect) {
     res.status(401).json({ error: "Contraseña actual incorrecta" });
     return;
   }
+
+  user.password = await hashPassword(password);
+  await user.save();
+  res.status(200).json({ message: "Contraseña actualizada correctamente" });
   res.json(user);
 };
