@@ -178,3 +178,18 @@ export const updateCurrentUserPassword = async (
   res.status(200).json({ message: "Contraseña actualizada correctamente" });
   res.json(user);
 };
+
+export const checkPassword = async (req: Request, res: Response) => {
+  const { password } = req.body;
+  const { id } = req.user;
+
+  const user = await User.findByPk(id);
+
+  const isPasswordCorrect = await comparePassword(password, user.password);
+  if (!isPasswordCorrect) {
+    res.status(401).json({ error: "Contraseña incorrecta" });
+    return;
+  }
+
+  res.json({ message: "Contraseña correcta" });
+};

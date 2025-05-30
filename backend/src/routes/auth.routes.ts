@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { body, param } from "express-validator";
 import {
+  checkPassword,
   confirmAccount,
   createAccount,
   forgotPassword,
@@ -87,9 +88,21 @@ router.post(
     .withMessage("Por favor, ingresa tu contraseña actual"),
   body("password")
     .isLength({ min: 8 })
-    .withMessage("La nueva contraseña debe tener al menos 8 caracteres para mayor seguridad"),
+    .withMessage(
+      "La nueva contraseña debe tener al menos 8 caracteres para mayor seguridad"
+    ),
   handleInputValidation,
   updateCurrentUserPassword
+);
+
+router.post(
+  "/check-password",
+  authenticate,
+  body("password")
+    .notEmpty()
+    .withMessage("Por favor, ingresa tu contraseña actual"),
+  handleInputValidation,
+  checkPassword
 );
 
 export default router;
