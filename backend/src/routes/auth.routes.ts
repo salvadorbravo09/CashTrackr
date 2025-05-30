@@ -1,6 +1,10 @@
 import { Router } from "express";
 import { body } from "express-validator";
-import { confirmAccount, createAccount } from "../controllers/auth.controller";
+import {
+  confirmAccount,
+  createAccount,
+  login,
+} from "../controllers/auth.controller";
 import { handleInputValidation } from "../middleware/validation";
 import { limiter } from "../config/limiter";
 
@@ -26,6 +30,14 @@ router.post(
     .withMessage("Token no valido"),
   handleInputValidation,
   confirmAccount
+);
+
+router.post(
+  "/login",
+  body("email").isEmail().withMessage("Email no valido"),
+  body("password").notEmpty().withMessage("El password no puede ir vacio"),
+  handleInputValidation,
+  login
 );
 
 export default router;

@@ -65,3 +65,20 @@ export const confirmAccount = async (req: Request, res: Response) => {
     res.status(500).json({ error: "Hubo un error al confirmar la cuenta" });
   }
 };
+
+export const login = async (req: Request, res: Response) => {
+  try {
+    const { email } = req.body;
+
+    const user = await User.findOne({ where: { email } });
+    if (!user) {
+      res.status(404).json({ error: "Usuario no encontrado" });
+      return;
+    }
+
+    
+
+  } catch (error) {
+    res.status(500).json({ error: "Hubo un error al iniciar sesión" });
+  }
+};
