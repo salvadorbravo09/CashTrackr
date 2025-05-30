@@ -41,7 +41,6 @@ export const sendConfirmationEmail = async (user: EmailType) => {
       </div>
     `,
   });
-  console.log("Mensaje enviado ", email.messageId);
 };
 
 export const sendPasswordResetToken = async (user: EmailType) => {
@@ -79,5 +78,4 @@ export const sendPasswordResetToken = async (user: EmailType) => {
       </div>
     `,
   });
-  console.log("Mensaje enviado ", email.messageId);
 };

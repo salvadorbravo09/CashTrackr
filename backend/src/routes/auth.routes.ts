@@ -5,6 +5,7 @@ import {
   createAccount,
   forgotPassword,
   login,
+  validateToken,
 } from "../controllers/auth.controller";
 import { handleInputValidation } from "../middleware/validation";
 import { limiter } from "../config/limiter";
@@ -47,6 +48,16 @@ router.post(
   body("email").isEmail().withMessage("Email no valido"),
   handleInputValidation,
   forgotPassword
+);
+
+router.post(
+  "/validate-token",
+  body("token")
+    .notEmpty()
+    .isLength({ min: 6, max: 6 })
+    .withMessage("Token no valido"),
+  handleInputValidation,
+  validateToken
 );
 
 export default router;

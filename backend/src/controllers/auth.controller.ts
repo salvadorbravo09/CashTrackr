@@ -117,5 +117,17 @@ export const forgotPassword = async (req: Request, res: Response) => {
     token: user.token,
   });
 
-  res.json("Revisa tu email para instrucciones");
+  res.status(200).json({ message: "Token enviado al correo electrónico" });
+};
+
+export const validateToken = async (req: Request, res: Response) => {
+  const { token } = req.body;
+
+  const tokenExists = await User.findOne({ where: { token } });
+  if (!tokenExists) {
+    res.status(404).json({ error: "Token no valido" });
+    return;
+  }
+
+  res.status(200).json({ message: "Token valido" });
 };
