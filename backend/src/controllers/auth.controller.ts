@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import jwt from "jsonwebtoken";
 import User from "../models/User";
 import { comparePassword, hashPassword } from "../utils/auth";
 import { generateToken } from "../utils/token";
@@ -148,4 +149,25 @@ export const resetPasswordWithToken = async (req: Request, res: Response) => {
   await user.save();
 
   res.status(200).json({ message: "Contraseña reestablecida correctamente" });
+};
+
+export const getUser = async (req: Request, res: Response) => {
+  const bearer = req.headers.authorization;
+  if (!bearer) {
+    res.status(401).json({ error: "No autorizado" });
+    return;
+  }
+
+  const [, token] = bearer.split(" ");
+  if (!token) {
+    res.status(401).json({ error: "Token no valido" });
+    return;
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+    res.json(decoded);
+  } catch (error) {
+    res.status(500).json({ error: "Token no valido" });
+  }
 };

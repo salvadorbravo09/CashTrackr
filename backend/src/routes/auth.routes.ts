@@ -4,6 +4,7 @@ import {
   confirmAccount,
   createAccount,
   forgotPassword,
+  getUser,
   login,
   resetPasswordWithToken,
   validateToken,
@@ -73,5 +74,7 @@ router.post(
   handleInputValidation,
   resetPasswordWithToken
 );
+
+router.get("/user", getUser);
 
 export default router;
