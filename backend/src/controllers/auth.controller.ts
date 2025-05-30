@@ -153,3 +153,23 @@ export const resetPasswordWithToken = async (req: Request, res: Response) => {
 export const getUser = async (req: Request, res: Response) => {
   res.json(req.user);
 };
+
+export const updateCurrentUserPassword = async (
+  req: Request,
+  res: Response
+) => {
+  const { current_password, password } = req.body;
+  const { id } = req.user;
+
+  const user = await User.findByPk(id);
+
+  const isPasswordCorrect = await comparePassword(
+    current_password,
+    user.password
+  );
+  if (!isPasswordCorrect) {
+    res.status(401).json({ error: "Contraseña actual incorrecta" });
+    return;
+  }
+  res.json(user);
+};

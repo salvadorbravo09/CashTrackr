@@ -7,6 +7,7 @@ import {
   getUser,
   login,
   resetPasswordWithToken,
+  updateCurrentUserPassword,
   validateToken,
 } from "../controllers/auth.controller";
 import { handleInputValidation } from "../middleware/validation";
@@ -77,5 +78,18 @@ router.post(
 );
 
 router.get("/user", authenticate, getUser);
+
+router.post(
+  "/update-password",
+  authenticate,
+  body("current_password")
+    .notEmpty()
+    .withMessage("Por favor, ingresa tu contraseña actual"),
+  body("password")
+    .isLength({ min: 8 })
+    .withMessage("La nueva contraseña debe tener al menos 8 caracteres para mayor seguridad"),
+  handleInputValidation,
+  updateCurrentUserPassword
+);
 
 export default router;
