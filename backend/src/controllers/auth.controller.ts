@@ -3,6 +3,7 @@ import User from "../models/User";
 import { comparePassword, hashPassword } from "../utils/auth";
 import { generateToken } from "../utils/token";
 import { sendConfirmationEmail } from "../emails/authEmail";
+import { generateJWT } from "../utils/jwt";
 
 export const createAccount = async (req: Request, res: Response) => {
   try {
@@ -86,6 +87,10 @@ export const login = async (req: Request, res: Response) => {
       res.status(401).json({ error: "Contraseña incorrecta" });
       return;
     }
+
+    // Generar un token JWT
+    const token = generateJWT(user.id);
+    res.json(token);
   } catch (error) {
     res.status(500).json({ error: "Hubo un error al iniciar sesión" });
   }
