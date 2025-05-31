@@ -6,7 +6,9 @@ export const getAllBudgets = async (req: Request, res: Response) => {
   try {
     const budgets = await Budget.findAll({
       order: [["createdAt", "DESC"]],
-      // TODO: Filtrar por el usuario autenticado
+      where: {
+        userId: req.user.id, // Filtra los presupuestos por el ID del usuario autenticado
+      },
     });
     res.status(200).json(budgets);
   } catch (error) {
@@ -16,7 +18,7 @@ export const getAllBudgets = async (req: Request, res: Response) => {
 
 export const getBudgetById = async (req: Request, res: Response) => {
   const budget = await Budget.findByPk(req.budget.id, {
-    include: [Expense]
+    include: [Expense],
   });
 
   res.status(200).json(budget);
