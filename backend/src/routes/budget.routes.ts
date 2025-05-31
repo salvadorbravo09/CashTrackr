@@ -28,6 +28,7 @@ import {
 } from "../validations/expense.validation";
 import { checkExpenseExists } from "../middleware/checkExpenseExists.middleware";
 import { authenticate } from "../middleware/auth";
+import { hasAccess } from "../middleware/hasAccess.middleware";
 
 const router = Router();
 
@@ -40,6 +41,7 @@ router.get(
   "/:budgetId",
   getBudgetByIdValidation,
   checkBudgetExists,
+  hasAccess,
   handleInputValidation,
   getBudgetById
 );
@@ -50,6 +52,7 @@ router.put(
   "/:budgetId",
   updateBudgetByIdValidation,
   checkBudgetExists,
+  hasAccess,
   handleInputValidation,
   updateBudgetById
 );
@@ -58,6 +61,7 @@ router.delete(
   "/:budgetId",
   deleteBudgetByIdValidation,
   checkBudgetExists,
+  hasAccess,
   handleInputValidation,
   deleteBudgetById
 );
@@ -66,6 +70,7 @@ router.delete(
 router.post(
   "/:budgetId/expenses",
   checkBudgetExists,
+  hasAccess,
   createExpenseValidation,
   handleInputValidation,
   createExpense
@@ -74,6 +79,7 @@ router.post(
 router.get(
   "/:budgetId/expenses/:expenseId",
   checkBudgetExists,
+  hasAccess,
   checkExpenseExists,
   validateExpenseId,
   handleInputValidation,
@@ -83,6 +89,7 @@ router.get(
 router.put(
   "/:budgetId/expenses/:expenseId",
   checkBudgetExists,
+  hasAccess,
   checkExpenseExists,
   updateExpenseValidation,
   handleInputValidation,
@@ -92,6 +99,7 @@ router.put(
 router.delete(
   "/:budgetId/expenses/:expenseId",
   checkBudgetExists,
+  hasAccess,
   checkExpenseExists,
   deleteExpenseValidation,
   handleInputValidation,
