@@ -25,11 +25,11 @@ export const getBudgetById = async (req: Request, res: Response) => {
 export const createBudget = async (req: Request, res: Response) => {
   try {
     const budget = new Budget(req.body);
+    budget.userId = req.user.id; // Asignar el ID del usuario autenticado
     await budget.save();
     res.status(201).json({ message: "Presupuesto creado correctamente" });
   } catch (error) {
     res.status(500).json({ error: "Hubo un error" });
-    return;
   }
 };
 

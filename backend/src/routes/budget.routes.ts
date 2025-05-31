@@ -27,8 +27,11 @@ import {
   deleteExpenseValidation,
 } from "../validations/expense.validation";
 import { checkExpenseExists } from "../middleware/checkExpenseExists.middleware";
+import { authenticate } from "../middleware/auth";
 
 const router = Router();
+
+router.use(authenticate);
 
 // REST API
 router.get("/", getAllBudgets);
