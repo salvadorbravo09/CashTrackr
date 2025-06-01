@@ -8,20 +8,25 @@ jest.mock("../../models/Budget", () => ({
 }));
 
 describe("budget.controller.getAllBudgets", () => {
-  it("should return 3 budgets", async () => {
+  it("should retrive 2 budgets for user with ID 1", async () => {
     const req = createRequest({
       method: "GET",
       url: "/api/v1/budgets",
       user: {
-        id: 500,
+        id: 1,
       },
     });
     const res = createResponse();
 
-    (Budget.findAll as jest.Mock).mockResolvedValue(budgets);
+    const updatedBudgets = budgets.filter(
+      (budget) => budget.userId === req.user.id
+    );
+    (Budget.findAll as jest.Mock).mockResolvedValue(updatedBudgets);
     await getAllBudgets(req, res);
 
     const data = res._getJSONData();
-    console.log(data);
+    expect(data).toHaveLength(2);
+    expect(res.statusCode).toBe(200);
+    expect(res.statusCode).not.toBe(500);
   });
 });
