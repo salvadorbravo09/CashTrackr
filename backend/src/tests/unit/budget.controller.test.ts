@@ -20,6 +20,17 @@ describe("budget.controller.getAllBudgets", () => {
    * Test 1: Usuario con ID 1
    * Debe retornar 2 presupuestos del mock para el usuario con ID 1
    */
+
+  beforeEach(() => {
+    (Budget.findAll as jest.Mock).mockReset();
+    (Budget.findAll as jest.Mock).mockImplementation((options) => {
+      const updatedBudgets = budgets.filter(
+        (budget) => budget.userId === options.where.userId
+      );
+      return Promise.resolve(updatedBudgets);
+    });
+  });
+
   it("should retrieve 2 budgets for user with ID 1", async () => {
     // Crear solicitud y respuesta mock
     const req = createRequest({
@@ -28,14 +39,6 @@ describe("budget.controller.getAllBudgets", () => {
       user: { id: 1 },
     });
     const res = createResponse();
-
-    // Filtrar presupuestos del mock según userId
-    const updatedBudgets = budgets.filter(
-      (budget) => budget.userId === req.user.id
-    );
-
-    // Configurar el mock de findAll para que devuelva los presupuestos filtrados
-    (Budget.findAll as jest.Mock).mockResolvedValue(updatedBudgets);
 
     // Ejecutar el controlador
     await getAllBudgets(req, res);
@@ -95,5 +98,21 @@ describe("budget.controller.getAllBudgets", () => {
     expect(data).toHaveLength(0); // No presupuestos encontrados
     expect(res.statusCode).toBe(200); // Aún así, debe responder correctamente
     expect(res.statusCode).not.toBe(500);
+  });
+
+  it("should handle errors when fetching budgets", async () => {
+    const req = createRequest({
+      method: "GET",
+      url: "/api/v1/budgets",
+      user: { id: 100 },
+    });
+    const res = createResponse();
+
+    (Budget.findAll as jest.Mock).mockRejectedValue(new Error());
+
+    await getAllBudgets(req, res);
+
+    expect(res.statusCode).toBe(500);
+    expect(res._getJSONData()).toEqual({ error: "Hubo un error" });
   });
 });
